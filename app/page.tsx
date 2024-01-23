@@ -1,5 +1,6 @@
 /** @client */
-import {useClient, useState, useEffect } from 'react';
+import { useClient, useState, useEffect } from 'react';
+//import { useClient, useState } from 'react';
 import { ChatWindow } from "@/components/ChatWindow";
 import { checkDatabaseConnection } from "@/utils/database"; // Ensure this utility function is implemented
 
