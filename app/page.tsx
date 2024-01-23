@@ -4,8 +4,6 @@ import { ChatWindow } from "@/components/ChatWindow";
 import { checkDatabaseConnection } from "@/utils/database"; // Ensure this utility function is implemented
 
 export default function Home() {
-
-export default function Home() {
   const [dbConnected, setDbConnected] = useState(false);
 
   useEffect(() => {
