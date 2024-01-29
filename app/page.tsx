@@ -2,26 +2,26 @@
 import { useState, useEffect } from 'react';
 import { useState } from 'react'
 import { ChatWindow } from "@/components/ChatWindow";
-// import { checkDatabaseConnection } from "@/utils/database"; // Ensure this utility function is implemented
+import { checkDatabaseConnection } from "@/utils/database"; // Ensure this utility function is implemented
 
-//export default function Home() {
-//  const [dbConnected, setDbConnected] = useState(false);
+export default function Home() {
+  const [dbConnected, setDbConnected] = useState(false);
 
-//  useEffect(() => {
-//    const verifyConnection = async () => {
-//      const isConnected = await checkDatabaseConnection();
-//      setDbConnected(isConnected);
-//    };
+  useEffect(() => {
+    const verifyConnection = async () => {
+      const isConnected = await checkDatabaseConnection();
+      setDbConnected(isConnected);
+    };
 
-//    verifyConnection();
-//  }, []);
+    verifyConnection();
+  }, []);
 
-//  const DatabaseStatusIndicator = (
-//    <div className={`flex items-center ${dbConnected ? 'text-green-500' : 'text-red-500'}`}>
-//      <span className="material-icons">{dbConnected ? 'check_circle' : 'cancel'}</span>
-//      <span className="ml-2">{dbConnected ? 'Database Connected' : 'Database Not Connected'}</span>
-//    </div>
-//  );
+  const DatabaseStatusIndicator = (
+    <div className={`flex items-center ${dbConnected ? 'text-green-500' : 'text-red-500'}`}>
+      <span className="material-icons">{dbConnected ? 'check_circle' : 'cancel'}</span>
+      <span className="ml-2">{dbConnected ? 'Database Connected' : 'Database Not Connected'}</span>
+    </div>
+  );
 
   const InfoCard = (
     <div className="p-4 md:p-8 rounded bg-[#25252d] w-full max-h-[85%] overflow-hidden">
