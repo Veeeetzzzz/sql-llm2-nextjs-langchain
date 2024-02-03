@@ -1,8 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
-//import { useState } from 'react'
 import { ChatWindow } from "@/components/ChatWindow";
-import { checkDatabaseConnection } from "@/utils/database"; // Ensure this utility function is implemented
+import { checkDatabaseConnection } from "@/utils/database/checkDatabaseConnection";
 
 export default function Home() {
   const [dbConnected, setDbConnected] = useState(false);
