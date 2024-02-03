@@ -1,22 +1,27 @@
-// Import your database client library, e.g., pg for PostgreSQL
-import { Client } from 'pg';
+import { Client as PgClient } from 'pg';
+import mysql from 'mysql2/promise'; 
 
-// This is a very basic check.
-// You might want to implement a more robust check depending on your needs.
 export async function checkDatabaseConnection() {
+  const dbType = process.env.DB_TYPE;
+
   try {
-    const client = new Client({
-      // Your database connection information
-      connectionString: process.env.DATABASE_URL,
-    });
-    await client.connect();
-
-    // Perform a simple query to check if the connection is successful
-    const res = await client.query('SELECT 1');
-    await client.end();
-
-    // If the query is successful, then the database connection is good
-    return res ? true : false;
+    if (dbType === 'postgresql') {
+      const client = new PgClient({
+        connectionString: process.env.DATABASE_URL,
+      });
+      await client.connect();
+      const res = await client.query('SELECT 1');
+      await client.end();
+      return !!res; // Same as `res ? true : false`
+    } else if (dbType === 'mysql') {
+      const connection = await mysql.createConnection(process.env.DATABASE_URL);
+      const [rows] = await connection.execute('SELECT 1');
+      await connection.end();
+      return Array.isArray(rows) && rows.length > 0;
+    } else {
+      console.error('Unsupported DB type');
+      return false;
+    }
   } catch (error) {
     console.error('Database connection error:', error);
     return false;
