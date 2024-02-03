@@ -15,6 +15,22 @@ export default function Home() {
     verifyConnection();
   }, []);
 
+// This will replace the above useEffect function but not yet.  
+// useEffect(() => {
+//   const verifyConnection = async () => {
+//     try {
+//       const response = await fetch('/api/checkDbConnection');
+//       const data = await response.json();
+//       setDbConnected(data.connected);
+//     } catch (error) {
+//       console.error('Error verifying database connection:', error);
+//       setDbConnected(false);
+//     }
+//   };
+
+//   verifyConnection();
+// }, []);
+
   const DatabaseStatusIndicator = (
     <div className={`flex items-center ${dbConnected ? 'text-green-500' : 'text-red-500'}`}>
       <span className="material-icons">{dbConnected ? 'check_circle' : 'cancel'}</span>
