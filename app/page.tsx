@@ -6,30 +6,32 @@ import { checkDatabaseConnection } from "@/utils/database/checkDatabaseConnectio
 export default function Home() {
   const [dbConnected, setDbConnected] = useState(false);
 
-  useEffect(() => {
-    const verifyConnection = async () => {
-      const isConnected = await checkDatabaseConnection();
-      setDbConnected(isConnected);
-    };
+/*Old DB logic
+useEffect(() => {
+  const verifyConnection = async () => {
+    const isConnected = await checkDatabaseConnection();
+    setDbConnected(isConnected);
+  };
 
-    verifyConnection();
-  }, []);
+  verifyConnection();
+}, []);
+*/
 
-// This will replace the above useEffect function but not yet.  
-// useEffect(() => {
-//   const verifyConnection = async () => {
-//     try {
-//       const response = await fetch('/api/checkDbConnection');
-//       const data = await response.json();
-//       setDbConnected(data.connected);
-//     } catch (error) {
-//       console.error('Error verifying database connection:', error);
-//       setDbConnected(false);
-//     }
-//   };
+// This now uses the API route instead of a direct connection
+useEffect(() => {
+  const verifyConnection = async () => {
+    try {
+      const response = await fetch('/api/checkDbConnection');
+      const data = await response.json();
+      setDbConnected(data.connected);
+    } catch (error) {
+      console.error('Error verifying database connection:', error);
+      setDbConnected(false);
+    }
+  };
 
-//   verifyConnection();
-// }, []);
+  verifyConnection();
+}, []);
 
   const DatabaseStatusIndicator = (
     <div className={`flex items-center ${dbConnected ? 'text-green-500' : 'text-red-500'}`}>
