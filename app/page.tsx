@@ -34,7 +34,7 @@ useEffect(() => {
 
   const DatabaseStatusIndicator = (
     <div className={`flex items-center ${dbConnected ? 'text-green-500' : 'text-red-500'}`}>
-      <span className="material-icons">{dbConnected ? 'check_circle' : '❌'}</span>
+      <span className="material-icons">{dbConnected ? '🟢' : '❌'}</span>
       <span className="ml-2">{dbConnected ? 'Database Connected' : 'Database Not Connected - Check /api/checkDbConnection.js'}</span>
     </div>
   );
@@ -71,7 +71,7 @@ useEffect(() => {
           <span className="ml-2">
             Find the source code and deploy your own version from our{" "}
             <a
-              href="https://github.com/your-github-repo"
+              href="https://github.com/Veeeetzzzz/sql-llm2-nextjs-langchain/tree/main"
               target="_blank"
             >
               GitHub repository
