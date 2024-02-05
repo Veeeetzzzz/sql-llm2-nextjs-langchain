@@ -34,8 +34,8 @@ useEffect(() => {
 
   const DatabaseStatusIndicator = (
     <div className={`flex items-center ${dbConnected ? 'text-green-500' : 'text-red-500'}`}>
-      <span className="material-icons">{dbConnected ? 'check_circle' : 'cancel'}</span>
-      <span className="ml-2">{dbConnected ? 'Database Connected' : 'Database Not Connected'}</span>
+      <span className="material-icons">{dbConnected ? 'check_circle' : '❌'}</span>
+      <span className="ml-2">{dbConnected ? 'Database Connected' : 'Database Not Connected - Check /api/checkDbConnection.js'}</span>
     </div>
   );
 
