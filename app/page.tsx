@@ -86,6 +86,7 @@ useEffect(() => {
           👇
           <span className="ml-2">
             Try asking a SQL query in natural language below, like <code>What are the sales figures for this quarter?</code>
+            {DatabaseStatusIndicator}
           </span>
         </li>
       </ul>
