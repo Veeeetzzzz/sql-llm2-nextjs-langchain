@@ -66,9 +66,6 @@ useEffect(() => {
             efficient data access.
           </span>
         </li>
-        <li>
-          {DatabaseStatusIndicator}
-        </li>
         <li className="text-l">
           📚
           <span className="ml-2">
