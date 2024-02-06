@@ -42,7 +42,7 @@ useEffect(() => {
   const InfoCard = (
     <div className="p-4 md:p-8 rounded bg-[#25252d] w-full max-h-[85%] overflow-hidden">
       <h1 className="text-3xl md:text-4xl mb-4">
-        ▲ Next.js + LangChain.js 🦜🔗
+        ▲ Next.js + LangChain.js 🦜🔗 {DatabaseStatusIndicator}
       </h1>
       <ul>
         <li className="text-l">
@@ -83,7 +83,6 @@ useEffect(() => {
           👇
           <span className="ml-2">
             Try asking a SQL query in natural language below, like <code>What are the sales figures for this quarter?</code>
-            {DatabaseStatusIndicator}
           </span>
         </li>
       </ul>
