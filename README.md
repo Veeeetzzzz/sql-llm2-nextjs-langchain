@@ -118,12 +118,7 @@ $ ANALYZE=true yarn build
 
 The example chains in the `app/api/chat/route.ts` and `app/api/chat/retrieval/route.ts` files use
 [LangChain Expression Language](https://js.langchain.com/docs/guides/expression_language/interface) to
-compose different LangChain modules together. You can integrate other retrievers, agents, preconfigured chains, and more too, though keep in mind
-`HttpResponseOutputParser` is meant to be used directly with model output.
-
-To learn more about what you can do with LangChain.js, check out the docs here:
-
-- https://js.langchain.com/docs/
+compose different LangChain modules together.
 
 ## ▲ Deploy on Vercel
 
@@ -133,5 +128,5 @@ Check out the [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 ## Thank You!
 
-Thanks for reading! If you have any questions or comments, reach out to us on Twitter
+Thanks for reading! If you have any questions or comments, reach out to Langchain on Twitter
 [@LangChainAI](https://twitter.com/langchainai), or [click here to join our Discord server](https://discord.gg/langchain).
