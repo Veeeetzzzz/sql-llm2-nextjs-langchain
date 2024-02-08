@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Message as VercelChatMessage, StreamingTextResponse } from "ai";
-import { appDataSource } from "./checkDatabaseConnection";
+import { appDataSource } from "/api/checkDbConnection";
 
 import { ChatOpenAI, SqlDatabase, PromptTemplate, RunnableSequence, StringOutputParser, HttpResponseOutputParser } from "@langchain/langchain"; // Assume all required modules are imported from "@langchain/langchain"
 
