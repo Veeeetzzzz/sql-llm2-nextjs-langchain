@@ -2,6 +2,10 @@
 
 Note: this template is being used as scaffolding for a project. This repositry should not be considered a suitable branch for production, it is subject to experimentation and all commits are being submitted with a build-in-public approach.
 
+# Bugs/issues to fix.
+
+- Resolve Langchain imports
+
 # Roadmap
 
  - Update RAG/Chat logic for mySQL/PostgreSQL
