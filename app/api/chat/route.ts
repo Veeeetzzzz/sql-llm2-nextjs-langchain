@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Message as VercelChatMessage, StreamingTextResponse } from "ai";
 import { appDataSource } from "/api/checkDbConnection";
-
-import { ChatOpenAI, SqlDatabase, PromptTemplate, RunnableSequence, StringOutputParser, HttpResponseOutputParser } from "@langchain/langchain"; // Assume all required modules are imported from "@langchain/langchain"
+import { DataSource } from "typeorm";
+import { SqlDatabase } from "langchain/sql_db";
+import { PromptTemplate } from "langchain/prompts";
+import { RunnableSequence } from "langchain/schema/runnable";
+import { ChatOpenAI } from "langchain/chat_models/openai";
+import { StringOutputParser } from "langchain/schema/output_parser";
 
 export const runtime = "edge";
 
