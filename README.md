@@ -4,7 +4,7 @@ Note: this template is being used as scaffolding for a project. This repositry s
 
 # Bugs/issues to fix.
 
-- Resolve Langchain imports
+ - [23:12:32.283] ./app/api/chat/route.ts:3:0 ~ Module not found: Can't resolve './api/checkDbConnection'
 
 # Roadmap
 
