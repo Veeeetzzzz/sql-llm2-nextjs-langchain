@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Message as VercelChatMessage, StreamingTextResponse } from "ai";
-import { appDataSource } from "./app/api/checkDbConnection";
+import { appDataSource } from "../checkDbConnection";
 import { DataSource } from "typeorm";
 import { SqlDatabase } from "langchain/sql_db";
 import { PromptTemplate } from "langchain/prompts";
