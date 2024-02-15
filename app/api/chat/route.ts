@@ -4,7 +4,7 @@ import { SqlDatabase } from "langchain/sql_db";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { createSqlAgent, SqlToolkit } from "langchain/agents/toolkits/sql";
 
-export const config = { runtime: 'experimental-edge' };
+export const runtime = "edge";
 
 async function handleRequest(req) {
   const db = await SqlDatabase.fromDataSourceParams({
