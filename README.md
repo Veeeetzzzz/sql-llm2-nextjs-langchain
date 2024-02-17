@@ -2,9 +2,10 @@
 
 Note: this template is being used as scaffolding for a project. This repositry should not be considered a suitable branch for production, it is subject to experimentation and all commits are being submitted with a build-in-public approach.
 
-# Bugs/issues to fix.
+# Current issues/WIP.
 
  - Set up retrieval augmented generation (RAG) with SQL agent
+ - Fix module errors for mySQL imports
 
 # Roadmap
 
