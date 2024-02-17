@@ -1,41 +1,80 @@
-import { NextRequest, NextResponse } from "next/server";
 import { appDataSource } from "../checkDbConnection";
 import { SqlDatabase } from "langchain/sql_db";
-import { ChatOpenAI } from "langchain/chat_models/openai";
-import { createSqlAgent, SqlToolkit } from "langchain/agents/toolkits/sql";
+import { ChatOpenAI } from "@langchain/openai";
+import { PromptTemplate } from "@langchain/core/prompts";
+import { RunnableSequence } from "@langchain/core/runnables";
+import { StringOutputParser } from "@langchain/core/output_parsers";
 
-//export const runtime = "edge";
+// Initialize the LLM (Language Model) with ChatOpenAI
+const llm = new ChatOpenAI();
 
-async function handleRequest(req) {
-  const db = await SqlDatabase.fromDataSourceParams({
-    appDataSource: appDataSource, //
-  });
+// Initialize SQL Database from appDataSource
+// Assuming appDataSource setup is compatible with SqlDatabase.fromDataSourceParams
+const db = await SqlDatabase.fromDataSourceParams({
+  appDataSource: appDataSource,
+});
 
-  const model = new ChatOpenAI({
-    modelName: "gpt-3.5-turbo",
-  });
+// Define prompt for generating SQL query
+const prompt = PromptTemplate.fromTemplate(`
+  Based on the provided SQL table schema below, write a SQL query that would answer the user's question.
+  ------------
+  SCHEMA: {schema}
+  ------------
+  QUESTION: {question}
+  ------------
+  SQL QUERY:`);
 
-  const toolkit = new SqlToolkit(db, model);
-  const executor = createSqlAgent(model, toolkit);
+// Define the runnable sequence for generating SQL query
+const sqlQueryChain = RunnableSequence.from([
+  {
+    schema: async () => db.getTableInfo(),
+    question: (input: { question: string }) => input.question,
+  },
+  prompt,
+  llm.bind({ stop: ["\nSQLResult:"] }),
+  new StringOutputParser(),
+]);
 
-  
-  const body = await req.json();
-  const input = body.question; // 
+// Execute SQL query chain
+// Replace question with reference to user input
+const res = await sqlQueryChain.invoke({
+  question: "How many employees are there?",
+});
+console.log({ res });
 
-  
-  const result = await executor.invoke({ input });
+// Define prompt for generating natural language response
+const finalResponsePrompt = PromptTemplate.fromTemplate(`
+  Based on the table schema below, question, SQL query, and SQL response, write a natural language response:
+  ------------
+  SCHEMA: {schema}
+  ------------
+  QUESTION: {question}
+  ------------
+  SQL QUERY: {query}
+  ------------
+  SQL RESPONSE: {response}
+  ------------
+  NATURAL LANGUAGE RESPONSE:`);
 
-  return new NextResponse(JSON.stringify({
-    question: input,
-    response: result.output,
-    details: result.intermediateSteps,
-  }), { status: 200, headers: { "Content-Type": "application/json" } });
-}
+// Define the final runnable sequence for generating natural language response
+const finalChain = RunnableSequence.from([
+  {
+    question: (input) => input.question,
+    query: sqlQueryChain,
+  },
+  {
+    schema: async () => db.getTableInfo(),
+    question: (input) => input.question,
+    query: (input) => input.query,
+    response: (input) => db.run(input.query), // db.run() depends on actual implementation in SqlDatabase from langchain
+  },
+  finalResponsePrompt,
+  llm,
+  new StringOutputParser(),
+]);
 
-export default async req => {
-  if (req.method === 'POST') {
-    return handleRequest(req);
-  } else {
-    return new NextResponse(JSON.stringify({ error: 'Method not allowed' }), { status: 405, headers: { "Content-Type": "application/json" } });
-  }
-};
+// Execute the final response chain
+const finalResponse = await finalChain.invoke({
+  question: "How many employees are there?",
+});
+console.log({ finalResponse });
