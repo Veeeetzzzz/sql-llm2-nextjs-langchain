@@ -6,8 +6,8 @@ Note: this template is being used as scaffolding for a project. This repositry s
 
  - Set up retrieval augmented generation (RAG) with SQL agent
  - Fix module errors for mySQL imports
- - Set up D3.js for data visulation
- - Test Oracle connectivity via api/checkDBconnection.js
+ - Set up D3.js for data visualization
+ - Test Oracle connectivity via api/checkDbconnection.js
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/langchain-ai/langchain-nextjs-template)
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Flangchain-ai%2Flangchain-nextjs-template)
