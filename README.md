@@ -10,7 +10,7 @@ Note: this template is being used as scaffolding for a project. This repositry s
 # Roadmap
 
  - Update RAG/Chat logic for mySQL/PostgreSQL
- - Add Oracle support
+ - Test Oracle support
  - Data visualization options
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/langchain-ai/langchain-nextjs-template)
