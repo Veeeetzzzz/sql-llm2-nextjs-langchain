@@ -6,14 +6,15 @@ import { PromptTemplate } from "@langchain/core/prompts";
 import { RunnableSequence } from "@langchain/core/runnables";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 
-// Initialize the LLM (Language Model) with ChatOpenAI
-const llm = new ChatOpenAI();
+export default async function handler(req, res) {
+  // Initialize the LLM (Language Model) with ChatOpenAI
+  const llm = new ChatOpenAI();
 
-// Initialize SQL Database from appDataSource
-// Assuming appDataSource setup is compatible with SqlDatabase.fromDataSourceParams
-const db = await SqlDatabase.fromDataSourceParams({
-  appDataSource: appDataSource,
-});
+  // Initialize SQL Database from appDataSource
+  // Assuming appDataSource setup is compatible with SqlDatabase.fromDataSourceParams
+  const db = await SqlDatabase.fromDataSourceParams({
+    appDataSource: appDataSource,
+  });
 
 // Define prompt for generating SQL query
 const prompt = PromptTemplate.fromTemplate(`
@@ -36,12 +37,12 @@ const sqlQueryChain = RunnableSequence.from([
   new StringOutputParser(),
 ]);
 
-// Execute SQL query chain
-// Replace question with reference to user input
-const res = await sqlQueryChain.invoke({
-  question: "How many employees are there?",
-});
-console.log({ res });
+  // Execute SQL query chain
+  // Replace question with reference to user input
+  const sqlQueryResult = await sqlQueryChain.invoke({
+    question: req.body.question || "How many employees are there?",
+  });
+  console.log({ sqlQueryResult });
 
 // Define prompt for generating natural language response
 const finalResponsePrompt = PromptTemplate.fromTemplate(`
@@ -74,8 +75,11 @@ const finalChain = RunnableSequence.from([
   new StringOutputParser(),
 ]);
 
-// Execute the final response chain
-const finalResponse = await finalChain.invoke({
-  question: "How many employees are there?",
-});
-console.log({ finalResponse });
+  const finalResponse = await finalChain.invoke({
+    question: req.body.question || "How many employees are there?",
+  });
+  console.log({ finalResponse });
+
+  // Send back the response
+  res.status(200).json({ finalResponse });
+}
