@@ -14,6 +14,7 @@
   },
   "dependencies": {
   "@langchain/community": "^0.0.19",
+  "mysql2": "^3.9.2"
   "@langchain/openai": "^0.0.12",
     "@langchain/core": "~0.1.44",
     "@next/bundle-analyzer": "^13.4.19",
