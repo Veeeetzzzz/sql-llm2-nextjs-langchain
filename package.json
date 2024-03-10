@@ -20,6 +20,7 @@
     "@next/bundle-analyzer": "^13.4.19",
     "@supabase/supabase-js": "^2.32.0",
     "react-native-sqlite-storage": "^6.0.1",
+    "react-native": "^0.73.5",
     "cardinal": "^2.1.1",
     "mysql": "^2.18.1",
     "typeorm": "^0.2.17",
