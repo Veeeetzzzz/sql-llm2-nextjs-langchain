@@ -4,10 +4,8 @@ Note: this template is being used as scaffolding for a project. This repositry s
 
 # Current issues/WIP.
 
- - Set up retrieval augmented generation (RAG) with SQL agent
- - Fix module errors for mySQL imports
- - Set up D3.js for data visualization
  - Test Oracle connectivity via api/checkDbconnection.js
+ - Set up RAG w/SQL Agent 
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/langchain-ai/langchain-nextjs-template)
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Flangchain-ai%2Flangchain-nextjs-template)
