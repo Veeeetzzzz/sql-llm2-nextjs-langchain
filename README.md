@@ -4,7 +4,7 @@ Note: this template is being used as scaffolding for a project. This repositry s
 
 # Current issues/WIP.
 
- - Test Oracle connectivity via api/checkDbconnection.js
+ - Test mySQL/PostgreSQL/Oracle connectivity via api/checkDbconnection.js
  - Set up RAG w/SQL Agent 
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/langchain-ai/langchain-nextjs-template)
