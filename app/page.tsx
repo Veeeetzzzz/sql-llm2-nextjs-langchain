@@ -5,18 +5,6 @@ import { ChatWindow } from "@/components/ChatWindow";
 export default function Home() {
   const [dbConnected, setDbConnected] = useState(false);
 
-/*Old DB logic
-useEffect(() => {
-  const verifyConnection = async () => {
-    const isConnected = await checkDatabaseConnection();
-    setDbConnected(isConnected);
-  };
-
-  verifyConnection();
-}, []);
-*/
-
-// This now uses the API route instead of a direct connection
 useEffect(() => {
   const verifyConnection = async () => {
     try {
