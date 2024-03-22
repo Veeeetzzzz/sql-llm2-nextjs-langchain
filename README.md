@@ -5,7 +5,7 @@ Note: this template is being used as scaffolding for a project. This repositry s
 # Current issues/WIP.
 
  - Test mySQL/PostgreSQL/Oracle connectivity via api/checkDbconnection.js
- - Set up RAG w/SQL Agent 
+ - Test RAG with SQL agent
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/langchain-ai/langchain-nextjs-template)
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Flangchain-ai%2Flangchain-nextjs-template)
