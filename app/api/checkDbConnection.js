@@ -9,14 +9,14 @@ async function handler(req, res) {
   try {
     if (dbType === 'postgresql') {
       const client = new PgClient({
-        connectionString: process.env.DATABASE_URL,
+        connectionString: 'postgresql://username:password@host:port/database',
       });
       await client.connect();
       const result = await client.query('SELECT 1');
       await client.end();
       res.status(200).json({ connected: !!result });
     } else if (dbType === 'mysql') {
-      const connection = await mysql.createConnection(process.env.DATABASE_URL);
+      const connection = await mysql.createConnection('mysql://username:password@host:port/database');
       const [rows] = await connection.execute('SELECT 1');
       await connection.end();
       res.status(200).json({ connected: Array.isArray(rows) && rows.length > 0 });
@@ -24,9 +24,9 @@ async function handler(req, res) {
     /* Uncomment below to add Oracle support
     else if (dbType === 'oracle') {
       await oracledb.createPool({
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        connectString: process.env.DATABASE_URL,
+        user: 'your_username',
+        password: 'your_password',
+        connectString: 'host:port/service_name',
       });
       const connection = await oracledb.getConnection();
       const result = await connection.execute('SELECT 1 FROM DUAL');
@@ -44,5 +44,4 @@ async function handler(req, res) {
   }
 }
 
-//export default handler;
-export default appDataSource;
+export default handler;
