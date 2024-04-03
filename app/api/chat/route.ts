@@ -14,6 +14,7 @@ import { SqlToolkit } from "langchain/agents/toolkits/sql";
 import { AIMessage } from "langchain/schema";
 import { SqlDatabase } from "langchain/sql_db";
 import { DataSource } from "mysql";
+import { connect } from "@planetscale/database";
 
 export const runtime = "edge";
 
@@ -35,6 +36,7 @@ AI:`;
  *
  * https://js.langchain.com/docs/guides/expression_language/cookbook#prompttemplate--llm--outputparser
  */
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -44,16 +46,12 @@ export async function POST(req: NextRequest) {
     const prompt = PromptTemplate.fromTemplate(TEMPLATE);
 
     const dbConnectionString = body.dbConnectionString;
-    let db: SqlDatabase;
+    let db;
 
     try {
-      // Check the database connection
-      const datasource = new DataSource({
-        type: dbConnectionString.includes("mysql") ? "mysql" : "postgres",
+      // Connect to the PlanetScale database
+      db = connect({
         url: dbConnectionString,
-      });
-      db = await SqlDatabase.fromDataSourceParams({
-        appDataSource: datasource,
       });
     } catch (error) {
       console.error("Error connecting to the database:", error);
