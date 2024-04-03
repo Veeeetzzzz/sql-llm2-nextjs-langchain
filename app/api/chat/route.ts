@@ -84,5 +84,5 @@ const finalChain = RunnableSequence.from([
   console.log({ finalResponse });
 
   // Send back the response
-  res.status(200).json({ finalResponse });
+  response.status(200).json({ finalResponse });
 }
