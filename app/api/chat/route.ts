@@ -15,6 +15,25 @@ import { AIMessage } from "langchain/schema";
 import { SqlDatabase } from "langchain/sql_db";
 //import { DataSource } from "mysql";
 import { connect } from "@planetscale/database";
+import { PlanetScaleDialect } from "langchain/sql_db";
+
+try {
+  // Connect to the PlanetScale database
+  const connection = connect({
+    url: dbConnectionString,
+  });
+
+  // Create an instance of SqlDatabase using PlanetScaleDialect
+  const db = await PlanetScaleDialect.fromConnection(connection);
+
+  // ...
+} catch (error) {
+  console.error("Error connecting to the database:", error);
+  return NextResponse.json(
+    { error: "Failed to connect to the database" },
+    { status: 500 }
+  );
+}
 
 export const runtime = "edge";
 
