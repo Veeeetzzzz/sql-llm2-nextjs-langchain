@@ -26,12 +26,6 @@ try {
   // Create an instance of SqlDatabase using PlanetScaleDialect
   const db = await PlanetScaleDialect.fromConnection(connection);
 
-  // ...
-} catch (error) {
-  console.error("Error connecting to the database:", error);
-  );
-}
-
 export const runtime = "edge";
 
 const formatMessage = (message: VercelChatMessage) => {
