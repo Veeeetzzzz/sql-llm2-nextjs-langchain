@@ -21,7 +21,6 @@
     "@supabase/supabase-js": "^2.32.0",
     "cardinal": "^2.1.1",
     "mysql": "^2.18.1",
-    "typeorm": "^0.2.17",
     "@types/node": "20.4.5",
     "@types/react": "18.2.17",
     "@types/react-dom": "18.2.7",
