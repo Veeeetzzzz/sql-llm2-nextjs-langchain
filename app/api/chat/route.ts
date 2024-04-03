@@ -1,88 +1,73 @@
-import { NextResponse } from 'next/server';
-import appDataSource from '../checkDbConnection';
-import { SqlDatabase } from "langchain/sql_db";
+import { NextRequest, NextResponse } from "next/server";
+import { Message as VercelChatMessage, StreamingTextResponse } from "ai";
+
 import { ChatOpenAI } from "@langchain/openai";
 import { PromptTemplate } from "@langchain/core/prompts";
-import { RunnableSequence } from "@langchain/core/runnables";
-import { StringOutputParser } from "@langchain/core/output_parsers";
+import { HttpResponseOutputParser } from "langchain/output_parsers";
 
-export async function POST(request: Request) {
-  const req = await request.json();
+export const runtime = "edge";
 
-  
-  // Initialize the LLM (Language Model) with ChatOpenAI
-  const llm = new ChatOpenAI();
+const formatMessage = (message: VercelChatMessage) => {
+  return `${message.role}: ${message.content}`;
+};
 
-  // Initialize SQL Database from appDataSource
-  // Assuming appDataSource setup is compatible with SqlDatabase.fromDataSourceParams
-  const db = await SqlDatabase.fromDataSourceParams({
-    appDataSource: appDataSource,
-  });
+const TEMPLATE = `You are a pirate named Patchy. All responses must be extremely verbose and in pirate dialect.
 
-// Define prompt for generating SQL query
-const prompt = PromptTemplate.fromTemplate(`
-  Based on the provided SQL table schema below, write a SQL query that would answer the user's question.
-  ------------
-  SCHEMA: {schema}
-  ------------
-  QUESTION: {question}
-  ------------
-  SQL QUERY:`);
+Current conversation:
+{chat_history}
 
-// Define the runnable sequence for generating SQL query
-const sqlQueryChain = RunnableSequence.from([
-  {
-    schema: async () => db.getTableInfo(),
-    question: (input: { question: string }) => input.question,
-  },
-  prompt,
-  llm.bind({ stop: ["\nSQLResult:"] }),
-  new StringOutputParser(),
-]);
+User: {input}
+AI:`;
 
-  // Execute SQL query chain
-  // Replace question with reference to user input
-  const sqlQueryResult = await sqlQueryChain.invoke({
-    question: req.body.question || "How many employees are there?",
-  });
-  console.log({ sqlQueryResult });
+/**
+ * This handler initializes and calls a simple chain with a prompt,
+ * chat model, and output parser. See the docs for more information:
+ *
+ * https://js.langchain.com/docs/guides/expression_language/cookbook#prompttemplate--llm--outputparser
+ */
+export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json();
+    const messages = body.messages ?? [];
+    const formattedPreviousMessages = messages.slice(0, -1).map(formatMessage);
+    const currentMessageContent = messages[messages.length - 1].content;
+    const prompt = PromptTemplate.fromTemplate(TEMPLATE);
 
-// Define prompt for generating natural language response
-const finalResponsePrompt = PromptTemplate.fromTemplate(`
-  Based on the table schema below, question, SQL query, and SQL response, write a natural language response:
-  ------------
-  SCHEMA: {schema}
-  ------------
-  QUESTION: {question}
-  ------------
-  SQL QUERY: {query}
-  ------------
-  SQL RESPONSE: {response}
-  ------------
-  NATURAL LANGUAGE RESPONSE:`);
+    /**
+     * You can also try e.g.:
+     *
+     * import { ChatAnthropic } from "langchain/chat_models/anthropic";
+     * const model = new ChatAnthropic({});
+     *
+     * See a full list of supported models at:
+     * https://js.langchain.com/docs/modules/model_io/models/
+     */
+    const model = new ChatOpenAI({
+      temperature: 0.8,
+      modelName: "gpt-3.5-turbo-1106",
+    });
 
-// Define the final runnable sequence for generating natural language response
-const finalChain = RunnableSequence.from([
-  {
-    question: (input) => input.question,
-    query: sqlQueryChain,
-  },
-  {
-    schema: async () => db.getTableInfo(),
-    question: (input) => input.question,
-    query: (input) => input.query,
-    response: (input) => db.run(input.query), // db.run() depends on actual implementation in SqlDatabase from langchain
-  },
-  finalResponsePrompt,
-  llm,
-  new StringOutputParser(),
-]);
+    /**
+     * Chat models stream message chunks rather than bytes, so this
+     * output parser handles serialization and byte-encoding.
+     */
+    const outputParser = new HttpResponseOutputParser();
 
-  const finalResponse = await finalChain.invoke({
-    question: req.body.question || "How many employees are there?",
-  });
-  console.log({ finalResponse });
+    /**
+     * Can also initialize as:
+     *
+     * import { RunnableSequence } from "@langchain/core/runnables";
+     * const chain = RunnableSequence.from([prompt, model, outputParser]);
+     */
+    const chain = prompt.pipe(model).pipe(outputParser);
 
-  // Send back the response
-  Response.status(200).json({ finalResponse });
+    const stream = await chain.stream({
+      chat_history: formattedPreviousMessages.join("\n"),
+      input: currentMessageContent,
+    });
+
+    return new StreamingTextResponse(stream);
+  } catch (e: any) {
+    return NextResponse.json({ error: e.message }, { status: e.status ?? 500 });
+  }
 }
