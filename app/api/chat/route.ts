@@ -29,9 +29,6 @@ try {
   // ...
 } catch (error) {
   console.error("Error connecting to the database:", error);
-  return NextResponse.json(
-    { error: "Failed to connect to the database" },
-    { status: 500 }
   );
 }
 
