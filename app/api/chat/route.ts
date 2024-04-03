@@ -1,4 +1,4 @@
-//import { appDataSource } from "../checkDbConnection";
+import { NextResponse } from 'next/server';
 import appDataSource from '../checkDbConnection';
 import { SqlDatabase } from "langchain/sql_db";
 import { ChatOpenAI } from "@langchain/openai";
@@ -6,7 +6,10 @@ import { PromptTemplate } from "@langchain/core/prompts";
 import { RunnableSequence } from "@langchain/core/runnables";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 
-export default async function handler(req, res) {
+export async function POST(request: Request) {
+  const req = await request.json();
+
+  
   // Initialize the LLM (Language Model) with ChatOpenAI
   const llm = new ChatOpenAI();
 
