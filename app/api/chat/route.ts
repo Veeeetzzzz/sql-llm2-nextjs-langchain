@@ -13,7 +13,7 @@ import { createOpenAIToolsAgent, AgentExecutor } from "langchain/agents";
 import { SqlToolkit } from "langchain/agents/toolkits/sql";
 import { AIMessage } from "langchain/schema";
 import { SqlDatabase } from "langchain/sql_db";
-import { DataSource } from "typeorm";
+import { DataSource } from "mysql";
 
 export const runtime = "edge";
 
