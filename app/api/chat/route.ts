@@ -1,20 +1,20 @@
-import { NextRequest, NextResponse } from "next/server";
-import { Message as VercelChatMessage, StreamingTextResponse } from "ai";
-import { ChatOpenAI } from "@langchain/openai";
-import { PromptTemplate } from "@langchain/core/prompts";
-import { HttpResponseOutputParser } from "langchain/output_parsers";
-import { 
-  ChatPromptTemplate, 
-  HumanMessagePromptTemplate, 
-  MessagesPlaceholder 
-} from "@langchain/core/prompts";
-import { createOpenAIToolsAgent, AgentExecutor } from "langchain/agents";
-import { SqlToolkit } from "langchain/agents/toolkits/sql";
-import { AIMessage } from "langchain/schema";
-import { connect } from "@planetscale/database";
-import { PlanetScaleDialect } from "langchain/sql_db";
+import { NextRequest, NextResponse } from 'next/server';
+import { Message as VercelChatMessage, StreamingTextResponse } from 'ai';
+import { ChatOpenAI } from '@langchain/openai';
+import { PromptTemplate } from '@langchain/core/prompts';
+import { HttpResponseOutputParser } from 'langchain/output_parsers';
+import {
+  ChatPromptTemplate,
+  HumanMessagePromptTemplate,
+  MessagesPlaceholder,
+} from '@langchain/core/prompts';
+import { createOpenAIToolsAgent, AgentExecutor } from 'langchain/agents';
+import { SqlToolkit } from 'langchain/agents/toolkits/sql';
+import { AIMessage } from 'langchain/schema';
+import { connect } from '@planetscale/database';
+import { PlanetScaleDialect } from 'langchain/sql_db';
 
-export const runtime = "edge";
+export const runtime = 'edge';
 
 const formatMessage = (message: VercelChatMessage) => {
   return `${message.role}: ${message.content}`;
@@ -45,16 +45,16 @@ export async function POST(req: NextRequest) {
       });
       db = await PlanetScaleDialect.fromConnection(connection);
     } catch (error) {
-      console.error("Error connecting to the database:", error);
+      console.error('Error connecting to the database:', error);
       return NextResponse.json(
-        { error: "Failed to connect to the database" },
+        { error: 'Failed to connect to the database' },
         { status: 500 }
       );
     }
 
     const model = new ChatOpenAI({
       temperature: 0.8,
-      modelName: "gpt-3.5-turbo-1106",
+      modelName: 'gpt-3.5-turbo-1106',
     });
 
     const outputParser = new HttpResponseOutputParser();
@@ -81,15 +81,15 @@ Thought: I should look at the tables in the database to see what I can query.
 {agent_scratchpad}`;
 
     const sqlPrompt = ChatPromptTemplate.fromMessages([
-      ["system", SQL_PREFIX],
-      HumanMessagePromptTemplate.fromTemplate("{input}"),
-      new AIMessage(SQL_SUFFIX.replace("{agent_scratchpad}", "")),
-      new MessagesPlaceholder("agent_scratchpad"),
+      ['system', SQL_PREFIX],
+      HumanMessagePromptTemplate.fromTemplate('{input}'),
+      new AIMessage(SQL_SUFFIX.replace('{agent_scratchpad}', '')),
+      new MessagesPlaceholder('agent_scratchpad'),
     ]);
 
     const newPrompt = await sqlPrompt.partial({
       dialect: sqlToolKit.dialect,
-      top_k: "10",
+      top_k: '10',
     });
 
     const runnableAgent = await createOpenAIToolsAgent({
@@ -108,22 +108,12 @@ Thought: I should look at the tables in the database to see what I can query.
     });
 
     const stream = await chain.stream({
-      chat_history: formattedPreviousMessages.join("\n"),
+      chat_history: formattedPreviousMessages.join('\n'),
       input: result.output,
     });
 
     return new StreamingTextResponse(stream);
   } catch (e: any) {
     return NextResponse.json({ error: e.message }, { status: e.status ?? 500 });
-  }
-}
-```
-
-Make sure in your `tsconfig.json` you have:
-```json
-{
-  "compilerOptions": {
-    "module": "esnext",
-    ...
   }
 }
