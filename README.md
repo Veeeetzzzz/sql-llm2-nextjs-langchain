@@ -4,7 +4,8 @@ Note: this template is being used as scaffolding for a project. This repositry s
 
 # Current issues/WIP.
 
- - Test mySQL/PostgreSQL/Oracle connectivity via api/checkDbconnection.js
+ - Replace react-native
+ - Add Postgres Embedding
  - Test RAG with SQL agent
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/langchain-ai/langchain-nextjs-template)
